@@ -2,17 +2,18 @@ import { response, Router } from "express";
 
 const router: Router = Router()
 
-router.get('/', (request, response) => {
+router.get('/users', (request, response) => {
 	const users: any = [
 		{
-			name: 'joao',
-			age: 24,
-			job: 'developer'
+			name: "Conta Master",
+			username: "masteraccount",
+			email: "masteraccount@gmail.com",
+			password: "senhaBoba123"
 		},
 	]
 
 	console.log(users)
-	return response.send(users)
+	response.send(users)
 })
 
 export { router }
