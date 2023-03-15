@@ -22,6 +22,6 @@ sequelize.authenticate()
 
 sequelize.sync()
 .then(() => {
-  app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+  app.listen(PORT, () => console.log(`Aplication running in http://localhost:${PORT}`));
 })
 .catch(err => console.log("Error: " + err));
