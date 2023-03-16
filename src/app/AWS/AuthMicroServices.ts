@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import UserRepository from '../Repositories/UserRepositoy';
 interface User {
   name: string;
   username: string;
@@ -17,7 +16,7 @@ class AuthMicroServices {
 
   public async register(user: User) {
     if (this.users.some(u => u.email === user.email || u.username === user.username)) {
-      throw new Error('E-mail or name already exists');
+      throw new Error('E-mail or name already exists'); 
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
