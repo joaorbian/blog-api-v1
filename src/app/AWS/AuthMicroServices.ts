@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
+import UserRepository from '../Repositories/UserRepositoy';
 interface User {
   name: string;
   username: string;
@@ -12,13 +12,12 @@ interface TokenPayload {
 	username: string;
 }
 
-class AuthService {
+class AuthMicroServices {
   public users: User[] = [];
-  private JWT_SECRET = 'nao-vai-achar';
 
   public async register(user: User) {
     if (this.users.some(u => u.email === user.email || u.username === user.username)) {
-      throw new Error('E-mail ou nome de usuário já cadastrado');
+      throw new Error('E-mail or name already exists');
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -26,8 +25,7 @@ class AuthService {
 		const newUser: User = {
       ...user,
       password: hashedPassword,
-    };
-
+    }
 
     this.users.push(newUser);
 		return this.users
@@ -52,4 +50,4 @@ class AuthService {
 
 }
 
-export default new AuthService()
+export default new AuthMicroServices()
