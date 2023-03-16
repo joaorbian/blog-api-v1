@@ -12,9 +12,9 @@ router.post('/users/create', async (req: Request, res: Response) => {
 
 router.post('/auth/login', async (req: Request, res: Response) => {
 	const { email, password} = req.body
-	const userCreated = await AuthService.login(email, password)
+	const userValidated = await AuthService.validateUser(email, password)
 
-	return res.status(201).json(userCreated)
+	return res.status(201).json(userValidated)
 })
 
 export { router }

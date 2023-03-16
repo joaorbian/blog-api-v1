@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-
 interface User {
   name: string;
   username: string;
@@ -17,7 +16,7 @@ class AuthService {
   public users: User[] = [];
   private JWT_SECRET = 'nao-vai-achar';
 
-  async register(user: User) {
+  public async register(user: User) {
     if (this.users.some(u => u.email === user.email || u.username === user.username)) {
       throw new Error('E-mail ou nome de usuário já cadastrado');
     }
@@ -34,7 +33,7 @@ class AuthService {
 		return this.users
   }
 
-  async login(email: string, password: string) {
+  public async validateUser(email: string, password: string) {
     const user = this.users.find(u => u.email === email);
 
 		if(!user) {
@@ -47,8 +46,10 @@ class AuthService {
 		}
 
 		const token = jwt.sign({ username: user.username}, 'secret', { expiresIn: '1h' })
+
 		return `magicToken=${token}`
   }
+
 }
 
 export default new AuthService()
