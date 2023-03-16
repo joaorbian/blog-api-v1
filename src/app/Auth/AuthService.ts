@@ -31,7 +31,6 @@ class AuthService {
 
 
     this.users.push(newUser);
-		console.log(this.users)
 		return this.users
   }
 
@@ -48,8 +47,7 @@ class AuthService {
 		}
 
 		const token = jwt.sign({ username: user.username}, 'secret', { expiresIn: '1h' })
-		console.log(token)
-		return token
+		return `magicToken=${token}`
   }
 }
 

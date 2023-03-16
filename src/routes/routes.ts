@@ -3,17 +3,16 @@ import AuthService from "../app/Auth/AuthService";
 
 const router: Router = Router()
 
-router.post('/users/create', (req: Request, res: Response) => {
+router.post('/users/create', async (req: Request, res: Response) => {
 	const user = req.body
-	const userCreated = AuthService.register(user)
+	const userCreated = await AuthService.register(user)
 
 	return res.status(201).json(userCreated)
 })
 
-router.post('/auth/login', (req: Request, res: Response) => {
-	const { username, email, password} = req.body
-
-	const userCreated = AuthService.login(email, password)
+router.post('/auth/login', async (req: Request, res: Response) => {
+	const { email, password} = req.body
+	const userCreated = await AuthService.login(email, password)
 
 	return res.status(201).json(userCreated)
 })
