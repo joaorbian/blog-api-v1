@@ -1,4 +1,5 @@
 import AuthMicroServices from "../AWS/AuthMicroServices";
+import UserService from "../Services/UsersService";
 export default class UsersController {
 	static async register(Request, Response) {
 		const user = Request.body;
@@ -24,8 +25,8 @@ export default class UsersController {
 		}
 	}
 
-	// async allUsers(Request, Response) {
-	//     const allUsers =
-	//     return Response.send()
-	// }
+	static async allUsers(users: any, Request, Response) {
+	    const allUsers = await UserService.findUserAll(users)
+	    return Response.send(allUsers)
+	}
 }

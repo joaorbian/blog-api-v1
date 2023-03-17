@@ -1,7 +1,7 @@
 import UserRepository from "../Repositories/UserRepositoy";
 
 export default class UserService {
-	async createUser(user: any): Promise<any> {
+	static async createUser(user: any): Promise<any> {
 		const createUser = await UserRepository.createUser(user);
 
 		if (!createUser) {
@@ -11,12 +11,12 @@ export default class UserService {
 		return createUser;
 	}
 
-	async findUserAll(users: any): Promise<any> {
+	static async findUserAll(users: any): Promise<any> {
 		const allUsers = await UserRepository.findUserAll(users);
 		return allUsers;
 	}
 
-	async findUserById(id: number): Promise<any | boolean> {
+	static async findUserById(id: number): Promise<any | boolean> {
 		const findUserById = await UserRepository.findUserById(id);
 
 		if (!findUserById) {
@@ -26,7 +26,7 @@ export default class UserService {
 		return findUserById;
 	}
 
-	async updateUserById(id: number, users: any): Promise<any> {
+	static async updateUserById(id: number, users: any): Promise<any> {
 		const allUsers = await UserRepository.findUserAll(users);
 		const userId = await UserRepository.updateUserById(id);
 
@@ -52,7 +52,7 @@ export default class UserService {
 		}
 	}
 
-	async deleteUserById(id: number, user: any): Promise<any> {
+	static async deleteUserById(id: number, user: any): Promise<any> {
 		const deleteuserById = await UserRepository.deleteUserById(id, user);
 
 		if (!deleteuserById) {

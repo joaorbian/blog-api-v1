@@ -7,4 +7,6 @@ router.post('/auth/register', UsersController.register)
 
 router.post('/auth/login', UsersController.login)
 
+router.get('/users', UsersController.allUsers)
+
 export { router }
