@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { json } from 'sequelize';
 interface User {
   name: string;
   username: string;
@@ -7,12 +8,9 @@ interface User {
   password: string;
 }
 
-interface TokenPayload {
-	username: string;
-}
-
 class AuthMicroServices {
   public users: User[] = [];
+	public token: any
 
   public async register(user: User) {
     if (this.users.some(u => u.email === user.email || u.username === user.username)) {
@@ -27,7 +25,7 @@ class AuthMicroServices {
     }
 
     this.users.push(newUser);
-		return this.users
+		return json('User create with success')
   }
 
   public async validateUser(email: string, password: string) {
@@ -42,9 +40,9 @@ class AuthMicroServices {
 			throw new Error('Incorrect password')
 		}
 
-		const token = jwt.sign({ username: user.username}, 'secret', { expiresIn: '1h' })
-
-		return `magicToken=${token}`
+		const token = jwt.sign({ userId: user.name }, 'my-secret-key', { expiresIn: '1h' });
+		this.token = token
+	  return { token }
   }
 
 }
