@@ -1,4 +1,5 @@
 import AuthMicroServices from "../AWS/AuthMicroServices";
+import UserService from "../Services/UsersService";
 import { Request, Response } from "express";
 import { getMessageStatusCode } from "../../services/helper.service";
 
@@ -20,6 +21,11 @@ export default class UsersController {
 		const token = await AuthMicroServices.validateUser(email, password);
 
 		response.status(201).json({token});
+	}
+
+	static async allUsers(users: any, request: Request, response: Response) {
+		const allUsers = await UserService.findUserAll(users)
+		return response.status(201).send(allUsers)
 	}
 
 }

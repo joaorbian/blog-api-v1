@@ -10,4 +10,6 @@ router.post('/auth/login', UsersController.login)
 router.get('/articles', Validate.validateToken , ArticlesController.getAll)
 
 
+router.get('/users', UsersController.allUsers)
+
 export { router }
