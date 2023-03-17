@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { json } from 'sequelize';
+import { getMessageStatusCode } from '../../services/helper.service';
 interface User {
   name: string;
   username: string;
@@ -10,11 +10,11 @@ interface User {
 
 class AuthMicroServices {
   public users: User[] = [];
-	public token: any
+	public token: string
 
-  public async register(user: User) {
+  public async register(user: User): Promise<boolean> {
     if (this.users.some(u => u.email === user.email || u.username === user.username)) {
-      throw new Error('E-mail or name already exists'); 
+      return false
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -25,24 +25,23 @@ class AuthMicroServices {
     }
 
     this.users.push(newUser);
-		return json('User create with success')
+		return true
   }
 
   public async validateUser(email: string, password: string) {
     const user = this.users.find(u => u.email === email);
 
 		if(!user) {
-			throw new Error('User not found')
+			return getMessageStatusCode(204)
 		}
 
 		const passwordMatch = await bcrypt.compare(password, user.password)
 		if(!passwordMatch) {
-			throw new Error('Incorrect password')
+			return getMessageStatusCode(401)
 		}
 
-		const token = jwt.sign({ userId: user.name }, 'my-secret-key', { expiresIn: '1h' });
-		this.token = token
-	  return { token }
+		this.token = jwt.sign({ userId: user.name }, 'my-secret-key', { expiresIn: '10s' });
+		return this.token
   }
 
 }

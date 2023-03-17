@@ -1,5 +1,6 @@
 import AuthMicroServices from "../AWS/AuthMicroServices";
 import { Request, Response } from "express";
+import { getMessageStatusCode } from "../../services/helper.service";
 
 export default class UsersController {
 	static async register(request: Request, response: Response) {
@@ -7,28 +8,18 @@ export default class UsersController {
 		const userCreated = await AuthMicroServices.register(user);
 
 		if (!userCreated) {
-			response.status(404).json("Bad Request");
+			response.status(404).json({msg: getMessageStatusCode(404)});
 		} else {
-			response.status(201).json(userCreated);
+			response.status(201).json({msg: getMessageStatusCode(201)});
 		}
 	}
 
-	static async login(Request, Response) {
+	static async login(request: Request, response: Response) {
 
-		const { email, password } = await Request.body
-		const registeredUser = await AuthMicroServices.validateUser(email, password);
-		console.log(registeredUser)
+		const { email, password } = await request.body
+		const token = await AuthMicroServices.validateUser(email, password);
 
-		if (!registeredUser) {
-			 Response.badRequest({message: "invalid_credentials"} );
-		} else {
-			Response.status(201).json(registeredUser);
-		}
+		response.status(201).json({token});
 	}
-
-	// async allUsers(Request, Response) {
-	//     const allUsers =
-	//     return Response.send()
-	// }
 
 }
