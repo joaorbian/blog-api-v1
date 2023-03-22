@@ -1,8 +1,9 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import { User } from "./User";
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 
-@Table({ tableName: "users" })
+@Table({ tableName: "articles" })
 
-export class User extends Model<User> {
+export class Article extends Model<Article> {
 	@Column({
 		type: DataType.INTEGER,
 		allowNull: false,
@@ -14,18 +15,8 @@ export class User extends Model<User> {
 
 	@Column({
 		type: DataType.STRING,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: "This field cannot be empty",
-			},
-			len: {
-				args: [4, 50],
-				msg: "This field must be between 4 and 50 characters long",
-			},
-		},
 	})
-	name: string;
+	banner?: string;
 
 	@Column({
 		type: DataType.STRING,
@@ -40,7 +31,7 @@ export class User extends Model<User> {
 			},
 		},
 	})
-	username: string;
+	title: string;
 
 	@Column({
 		type: DataType.STRING,
@@ -50,23 +41,14 @@ export class User extends Model<User> {
 			notEmpty: {
 				msg: "This field cannot be empty",
 			},
-			isEmail: {
-				msg: "This field needs to be in email format",
-			},
 		},
 	})
-	email: string;
+	text: string;
 
 	@Column({
 		type: DataType.STRING,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: "This field cannot be empty",
-			},
-		},
 	})
-	password: string;
+	image?: string;
 
 	@Column({
 		type: DataType.DATE,
@@ -77,4 +59,14 @@ export class User extends Model<User> {
 		type: DataType.DATE,
 	})
 	updatedAt?: any;
+
+	@ForeignKey(() => User)
+	@Column({
+		type: DataType.INTEGER,
+		allowNull: false,
+	})
+	user_id: number;
+
+	@BelongsTo(() => User)
+	user: User;
 }

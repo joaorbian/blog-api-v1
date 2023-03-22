@@ -1,3 +1,4 @@
+import { Article } from './../../app/Models/Article';
 import { Sequelize } from 'sequelize-typescript';
 import { User } from "../../app/Models/User";
 
@@ -16,6 +17,7 @@ const sequelize = new Sequelize({
 	},
     models: [
         User,
+		Article
     ],
 });
 

@@ -1,15 +1,26 @@
 import { Router } from "express";
 import UsersController from "../app/Controllers/UsersController";
-import ArticlesController from "../app/Controllers/ArticlesController";
-import Validate  from "../app/middlewares/middleware";
+import UserService from "../app/Services/UserService";
+import AuthMicroServices from "../app/AWS/AuthMicroServices";
+import UserRepository from "../app/Repositories/UserRepository";
 
-const router: Router = Router()
+const UsersRouter: Router = Router()
 
-router.post('/auth/register', UsersController.register) 
-router.post('/auth/login', UsersController.login)
-router.get('/articles', Validate.validateToken , ArticlesController.getAll)
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
+const authMicroService = new AuthMicroServices(userRepository)
+const usersController = new UsersController(userService, authMicroService)
 
 
-router.get('/users', UsersController.allUsers)
+UsersRouter.post('/auth/register', (req, res) => usersController.register(req, res));
 
-export { router }
+UsersRouter.post('/auth/login', (req, res) => usersController.login(req, res));
+
+UsersRouter.get('/users', (req, res) => usersController.findUsersAll(req, res));
+
+UsersRouter.put('/user/edit/:id', (req, res) => usersController.updateUserById(req, res));
+
+UsersRouter.delete('/user/delete/:id', (req, res) => usersController.deleteUserById(req, res));
+
+
+export { UsersRouter }

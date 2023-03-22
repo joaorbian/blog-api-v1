@@ -1,31 +1,92 @@
-import AuthMicroServices from "../AWS/AuthMicroServices";
-import UserService from "../Services/UsersService";
 import { Request, Response } from "express";
 import { getMessageStatusCode } from "../../services/helper.service";
+import UserService from "../Services/UserService";
+import AuthMicroServices from "../AWS/AuthMicroServices";
 
 export default class UsersController {
-	static async register(request: Request, response: Response) {
-		const user = request.body;
-		const userCreated = await AuthMicroServices.register(user);
+	_articleService: UserService;
+	_authMicroService: AuthMicroServices;
 
-		if (!userCreated) {
-			response.status(404).json({msg: getMessageStatusCode(404)});
-		} else {
-			response.status(201).json({msg: getMessageStatusCode(201)});
+	constructor(userService: UserService, authMicroServices: AuthMicroServices) {
+		(this._articleService = userService),
+			(this._authMicroService = authMicroServices);
+	}
+
+	async register(request: Request, response: Response): Promise<void> {
+		try {
+			const user = await this._authMicroService.register(request.body);
+			response.status(201).json(user);
+		} catch (err) {
+			console.error(err);
+			response.status(500).json({ message: getMessageStatusCode(500) });
 		}
 	}
 
-	static async login(request: Request, response: Response) {
-
-		const { email, password } = await request.body
-		const token = await AuthMicroServices.validateUser(email, password);
-
-		response.status(201).json({token});
+	async login(request: Request, response: Response): Promise<void> {
+		try {
+			const token = await this._authMicroService.login(
+				request.body.email,
+				request.body.password
+			);
+			response.status(200).json({ token });
+		} catch (err) {
+			console.error(err);
+			response.status(401).json({ message: "Invalid credentials" });
+		}
 	}
 
-	static async allUsers(users: any, request: Request, response: Response) {
-		const allUsers = await UserService.findUserAll(users)
-		return response.status(201).send(allUsers)
+	async findUsersAll(request: Request, response: Response): Promise<void> {
+		try {
+			const users = await this._articleService.findUsersAll(request.query);
+			response.status(200).json(users);
+		} catch (err) {
+			console.error(err);
+			response.status(500).json({ message: getMessageStatusCode(500) });
+		}
 	}
 
+	async findUserById(request: Request, response: Response): Promise<void> {
+		try {
+			const user = await this._articleService.findUserById(request.params.id);
+			if (user) {
+				response.status(200).json(user);
+			} else {
+				response.status(404).json({ message: getMessageStatusCode(404) });
+			}
+		} catch (err) {
+			console.error(err);
+			response.status(500).json({ message: getMessageStatusCode(500) });
+		}
+	}
+
+	async updateUserById(request: Request, response: Response): Promise<void> {
+		try {
+			const user = await this._articleService.updateUserById(
+				request.params.id,
+				request.body
+			);
+			if (user) {
+				response.status(200).json(user);
+			} else {
+				response.status(404).json({ message: getMessageStatusCode(404) });
+			}
+		} catch (err) {
+			console.error(err);
+			response.status(500).send("Error updating user");
+		}
+	}
+
+	async deleteUserById(request: Request, response: Response): Promise<void> {
+		try {
+			const user = await this._articleService.deleteUserById(request.params.id);
+			if (user) {
+				response.status(200).json({ message: "User successfully deleted" });
+			} else {
+				response.status(404).json({ message: getMessageStatusCode(404) });
+			}
+		} catch (err) {
+			console.error(err);
+			response.status(500).json({ message: getMessageStatusCode(500) });
+		}
+	}
 }

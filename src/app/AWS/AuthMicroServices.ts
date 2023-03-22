@@ -1,49 +1,74 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { getMessageStatusCode } from '../../services/helper.service';
-interface User {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { getMessageStatusCode } from "../../services/helper.service";
+import { User } from "../Models/User";
+import UserRepository from "../Repositories/UserRepository";
+
+interface user {
+	name: string;
+	username: string;
+	email: string;
+	password: string;
 }
 
-class AuthMicroServices {
-  public users: User[] = [];
-	public token: string
-
-  public async register(user: User): Promise<boolean> {
-    if (this.users.some(u => u.email === user.email || u.username === user.username)) {
-      return false
-    }
-
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-
-		const newUser: User = {
-      ...user,
-      password: hashedPassword,
-    }
-
-    this.users.push(newUser);
-		return true
-  }
-
-  public async validateUser(email: string, password: string) {
-    const user = this.users.find(u => u.email === email);
-
-		if(!user) {
-			return getMessageStatusCode(204)
-		}
-
-		const passwordMatch = await bcrypt.compare(password, user.password)
-		if(!passwordMatch) {
-			return getMessageStatusCode(401)
-		}
-
-		this.token = jwt.sign({ userId: user.name }, 'my-secret-key', { expiresIn: '10s' });
-		return this.token
-  }
-
+interface IAuthMicroServices {
+	register(user: User): Promise<boolean>;
+	login(email: string, password: string): Promise<string | number>;
 }
 
-export default new AuthMicroServices()
+export default class AuthMicroServices implements IAuthMicroServices {
+	private _userRepository: UserRepository;
+	public token: string;
+
+	constructor(userRepository: UserRepository) {
+		this._userRepository = userRepository;
+	}
+
+	public async register(user: User): Promise<boolean> {
+		const userExists = await this._userRepository.findByEmailOrUsername(user);
+
+		if (userExists) {
+			let userExistDb: any = { message: "This user is already registered" };
+			return userExistDb;
+		} else {
+			const hashedPassword = await bcrypt.hash(user.password, 10);
+
+			const newUser = {
+				...user,
+				password: hashedPassword,
+			};
+
+			const createUserSucess = await this._userRepository.createUser(newUser);
+
+			return createUserSucess;
+		}
+	}
+
+	public async login(email: string, password: string) {
+		if (!email) {
+		  throw new Error("Email is required.");
+		}
+		if (!password) {
+		  throw new Error("Password is required.");
+		}
+	  
+		const user = await this._userRepository.findByEmailOrPassword({ email });
+		
+		if (!user) {
+		  return getMessageStatusCode(401);
+		}
+	  
+		const passwordMatch = await bcrypt.compare(password, user.password);
+	  
+		if (!passwordMatch) {
+		  return getMessageStatusCode(401);
+		}
+	  
+		this.token = jwt.sign({ userId: user.id }, "my-secret-key", {
+		  expiresIn: "10s",
+		});
+	  
+		return this.token;
+	  }
+	  
+}
