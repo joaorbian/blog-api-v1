@@ -12,17 +12,26 @@ const validate = new Validate()
 const articleRepository = new ArticleRepository();
 const userRepository = new UserRepository();
 const articleService = new ArticleService(articleRepository, userRepository);
-const articlesController = new ArticlesController(articleService, articleRepository, userRepository )
+const articlesController = new ArticlesController(articleService)
 
-ArticlesRouter.post('/create-article', validate.validateToken, (req, res) =>  articlesController.createArticle(req, res))
+// ArticlesRouter.post('/create-article', validate.validateToken, (req, res) =>  articlesController.createArticle(req, res))
 
-ArticlesRouter.get('/articles', validate.validateToken, (req, res) =>  articlesController.findArticlesAll(req, res))
+// ArticlesRouter.get('/articles', validate.validateToken, (req, res) =>  articlesController.findArticlesAll(req, res))
 
-// ArticlesRouter.get('/article/:id', validate.validateToken, (req, res) =>  articlesController(req, res))
+// ArticlesRouter.get('/article/:id', validate.validateToken, (req, res) =>  articlesController.findArticleById(req, res))
 
-// ArticlesRouter.put('/articles/edit/:id', validate.validateToken, (req, res) =>  articlesController(req, res))
+// ArticlesRouter.put('/article/edit/:id', validate.validateToken, (req, res) =>  articlesController.updateArticleById(req, res))
 
-// ArticlesRouter.delete('/articles/delete/:id', validate.validateToken, (req, res) =>  articlesController(req, res))
+// ArticlesRouter.delete('/article/delete/:id', validate.validateToken, (req, res) =>  articlesController.deleteArticleById(req, res))
 
+ArticlesRouter.post('/create-article', (req, res) =>  articlesController.createArticle(req, res))
+
+ArticlesRouter.get('/articles', (req, res) =>  articlesController.findArticlesAll(req, res))
+
+ArticlesRouter.get('/article/:id', (req, res) =>  articlesController.findArticleById(req, res))
+
+ArticlesRouter.put('/article/edit/:id', (req, res) =>  articlesController.updateArticleById(req, res))
+
+ArticlesRouter.delete('/article/delete/:id', (req, res) =>  articlesController.deleteArticleById(req, res))
 
 export { ArticlesRouter }

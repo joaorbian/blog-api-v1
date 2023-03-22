@@ -18,6 +18,8 @@ UsersRouter.post('/auth/login', (req, res) => usersController.login(req, res));
 
 UsersRouter.get('/users', (req, res) => usersController.findUsersAll(req, res));
 
+UsersRouter.get('/user/:id', (req, res) => usersController.findUsersAll(req, res));
+
 UsersRouter.put('/user/edit/:id', (req, res) => usersController.updateUserById(req, res));
 
 UsersRouter.delete('/user/delete/:id', (req, res) => usersController.deleteUserById(req, res));

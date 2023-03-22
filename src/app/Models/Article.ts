@@ -14,7 +14,7 @@ export class Article extends Model<Article> {
 	id: number;
 
 	@Column({
-		type: DataType.STRING,
+		type: DataType.TEXT,
 	})
 	banner?: string;
 

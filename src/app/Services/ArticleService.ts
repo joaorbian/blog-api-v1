@@ -13,25 +13,6 @@ export class ArticleService {
     this._userRepository = userRepository
   }
 
-  // async createArticle(articleData: any): Promise<any> {
-  //   const userExists = await this._userRepository.findUserById(userId);
-  //   if (!userExists) {
-  //     throw new Error("User not found");  
-  //   }
-
-  //   let articleData = {
-  //     banner,
-  //     title,
-  //     text,
-  //     image,
-  //     userId,
-  //   };
-
-  //   const createdArticle = await this._articleRepository.createArticle(articleData);
-
-  //   return createdArticle;
-  // }
-
   async createArticle(articleData: any): Promise<any> {
     const userExists = await this._userRepository.findUserById(articleData.user_id);
     if (!userExists) {

@@ -4,17 +4,14 @@ import UserService from "../Services/UserService";
 import AuthMicroServices from "../AWS/AuthMicroServices";
 
 export default class UsersController {
-	_articleService: UserService;
-	_authMicroService: AuthMicroServices;
-
-	constructor(userService: UserService, authMicroServices: AuthMicroServices) {
-		(this._articleService = userService),
-			(this._authMicroService = authMicroServices);
-	}
+	constructor(
+		private readonly _userService: UserService,
+		private readonly _authMicroServices: AuthMicroServices
+	) {}
 
 	async register(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._authMicroService.register(request.body);
+			const user = await this._authMicroServices.register(request.body);
 			response.status(201).json(user);
 		} catch (err) {
 			console.error(err);
@@ -24,7 +21,7 @@ export default class UsersController {
 
 	async login(request: Request, response: Response): Promise<void> {
 		try {
-			const token = await this._authMicroService.login(
+			const token = await this._authMicroServices.login(
 				request.body.email,
 				request.body.password
 			);
@@ -37,7 +34,7 @@ export default class UsersController {
 
 	async findUsersAll(request: Request, response: Response): Promise<void> {
 		try {
-			const users = await this._articleService.findUsersAll(request.query);
+			const users = await this._userService.findUsersAll(request.query);
 			response.status(200).json(users);
 		} catch (err) {
 			console.error(err);
@@ -47,7 +44,7 @@ export default class UsersController {
 
 	async findUserById(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._articleService.findUserById(request.params.id);
+			const user = await this._userService.findUserById(request.params.id);
 			if (user) {
 				response.status(200).json(user);
 			} else {
@@ -61,7 +58,7 @@ export default class UsersController {
 
 	async updateUserById(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._articleService.updateUserById(
+			const user = await this._userService.updateUserById(
 				request.params.id,
 				request.body
 			);
@@ -78,7 +75,7 @@ export default class UsersController {
 
 	async deleteUserById(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._articleService.deleteUserById(request.params.id);
+			const user = await this._userService.deleteUserById(request.params.id);
 			if (user) {
 				response.status(200).json({ message: "User successfully deleted" });
 			} else {
