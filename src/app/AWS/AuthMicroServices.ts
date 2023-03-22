@@ -51,24 +51,24 @@ export default class AuthMicroServices implements IAuthMicroServices {
 		if (!password) {
 		  throw new Error("Password is required.");
 		}
-	  
-		const user = await this._userRepository.findByEmailOrPassword({ email });
-		
+
+		const user = await this._userRepository.findByEmailOrPassword({ email, password });
+
 		if (!user) {
 		  return getMessageStatusCode(401);
 		}
 	  
 		const passwordMatch = await bcrypt.compare(password, user.password);
-	  
+
 		if (!passwordMatch) {
 		  return getMessageStatusCode(401);
 		}
 	  
 		this.token = jwt.sign({ userId: user.id }, "my-secret-key", {
-		  expiresIn: "10s",
+		  expiresIn: "1h",
 		});
 	  
 		return this.token;
-	  }
+	}
 	  
 }

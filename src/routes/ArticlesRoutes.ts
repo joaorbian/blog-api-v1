@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import ArticlesController from "../app/Controllers/ArticlesController";
-import Validate from "../app/Middlewares/Middleware";
+import Validate from "../app/middlewares/middleware";
 import ArticleRepository from "../app/Repositories/ArticleRepository";
 import UserRepository from "../app/Repositories/UserRepository";
 import {ArticleService }from "../app/Services/ArticleService";
@@ -14,7 +14,7 @@ const userRepository = new UserRepository();
 const articleService = new ArticleService(articleRepository, userRepository);
 const articlesController = new ArticlesController(articleService, articleRepository, userRepository )
 
-ArticlesRouter.post('/create-article', (req, res) =>  articlesController.createArticle(req, res))
+ArticlesRouter.post('/create-article', validate.validateToken, (req, res) =>  articlesController.createArticle(req, res))
 
 ArticlesRouter.get('/articles', validate.validateToken, (req, res) =>  articlesController.findArticlesAll(req, res))
 

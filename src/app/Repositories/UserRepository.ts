@@ -7,8 +7,6 @@ export default class UserRepository implements UserInterface {
     const user = await User.create(userData);
     return user.toJSON();
   }
-
-
   async findUsersAll(users: any): Promise<User[]> {
 		const allUsers = await User.findAll(users);
 		return allUsers;
@@ -33,8 +31,9 @@ export default class UserRepository implements UserInterface {
     if (!user.email && !user.password) {
       throw new Error("Email or password is required.");
     }
+		const result = await User.findOne({ where: { email: user.email } })
+		return result
   }
-
 
   async updateUserById(userId: string, userData: any): Promise<any> {
     const user = await User.findByPk(userId);
