@@ -64,11 +64,11 @@ export default class AuthMicroServices implements IAuthMicroServices {
 		  return getMessageStatusCode(401);
 		}
 	  
-		this.token = jwt.sign({ userId: user.id }, "my-secret-key", {
+		const token = jwt.sign({ userId: user.id }, "my-secret-key", {
 		  expiresIn: "1h",
 		});
 	  
-		return this.token;
+		return { token };
 	}
 	  
 }
