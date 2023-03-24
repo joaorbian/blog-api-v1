@@ -46,11 +46,6 @@ export class Article extends Model<Article> {
 	text: string;
 
 	@Column({
-		type: DataType.STRING,
-	})
-	image?: string;
-
-	@Column({
 		type: DataType.DATE,
 	})
 	createdAt?: any;
