@@ -31,6 +31,8 @@ ArticlesRouter.get('/articles', (req, res) =>  articlesController.findArticlesAl
 
 ArticlesRouter.get('/article/:id', (req, res) =>  articlesController.findArticleById(req, res))
 
+ArticlesRouter.get('/article-detail/:id', (req, res) =>  articlesController.findArticleById(req, res))
+
 ArticlesRouter.put('/article/edit/:id', (req, res) =>  articlesController.updateArticleById(req, res))
 
 ArticlesRouter.delete('/article/delete/:id', (req, res) =>  articlesController.deleteArticleById(req, res))
