@@ -21,11 +21,11 @@ export default class UsersController {
 
 	async login(request: Request, response: Response): Promise<void> {
 		try {
-			const token = await this._authMicroServices.login(
+			const user = await this._authMicroServices.login(
 				request.body.email,
 				request.body.password
 			);
-			response.status(200).json({ token });
+			response.status(200).json( user );
 		} catch (err) {
 			console.error(err);
 			response.status(401).json({ message: "Invalid credentials" });
@@ -70,6 +70,20 @@ export default class UsersController {
 		} catch (err) {
 			console.error(err);
 			response.status(500).send("Error updating user");
+		}
+	}
+
+	async recoveryPassword(request: Request, response: Response): Promise<void> {
+		try {
+			const user = await this._userService.recoveryPassword(request.params.id, request.body)
+			if(user) {
+				response.status(200).json(user);
+			} else {
+				response.status(404).json({ message: getMessageStatusCode(404) });
+			}
+		} catch (error) {
+			console.error(error);
+			response.status(500).json({ message: getMessageStatusCode(500) });
 		}
 	}
 

@@ -22,6 +22,8 @@ UsersRouter.get('/user/:id', (req, res) => usersController.findUsersAll(req, res
 
 UsersRouter.put('/user/edit/:id', (req, res) => usersController.updateUserById(req, res));
 
+UsersRouter.put('/user/recovery-password/:id', (req, res) => usersController.recoveryPassword(req, res));
+
 UsersRouter.delete('/user/delete/:id', (req, res) => usersController.deleteUserById(req, res));
 
 

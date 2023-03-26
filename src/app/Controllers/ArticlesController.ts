@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getMessageStatusCode } from "../../services/helper.service";
 import { ArticleService } from "../Services/ArticleService";
+import multer from "multer";
 
 export default class ArticlesController {
 	constructor(private readonly _articleService: ArticleService) {}
@@ -11,7 +12,6 @@ export default class ArticlesController {
 				banner: request.body.banner,
 				title: request.body.title,
 				text: request.body.text,
-				image: request.body.image,
 				user_id: request.body.user_id,
 			};
 

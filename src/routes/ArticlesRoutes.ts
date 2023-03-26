@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import ArticlesController from "../app/Controllers/ArticlesController";
 import Validate from "../app/middlewares/middleware";
+import upload from "../app/middlewares/multer";
 import ArticleRepository from "../app/Repositories/ArticleRepository";
 import UserRepository from "../app/Repositories/UserRepository";
 import {ArticleService }from "../app/Services/ArticleService";
@@ -24,7 +25,7 @@ const articlesController = new ArticlesController(articleService)
 
 // ArticlesRouter.delete('/article/delete/:id', validate.validateToken, (req, res) =>  articlesController.deleteArticleById(req, res))
 
-ArticlesRouter.post('/create-article', (req, res) =>  articlesController.createArticle(req, res))
+ArticlesRouter.post('/create-article', upload.single("file"), (req, res) =>  articlesController.createArticle(req, res))
 
 ArticlesRouter.get('/articles', (req, res) =>  articlesController.findArticlesAll(req, res))
 

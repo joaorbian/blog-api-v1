@@ -26,4 +26,9 @@ export default class UserService {
     const deletedUser = await this._userRepository.deleteUserById(userId);
     return deletedUser;
   }
+
+	async recoveryPassword(userId, userData) {
+		const recoveryPassword = await this._userRepository.recoveryPassword(userId, userData);
+    return recoveryPassword;
+	}
 }

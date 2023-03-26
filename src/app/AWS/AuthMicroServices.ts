@@ -31,12 +31,13 @@ export default class AuthMicroServices implements IAuthMicroServices {
 			let userExistDb: any = { message: "This user is already registered" };
 			return userExistDb;
 		} else {
-			const hashedPassword = await bcrypt.hash(user.password, 10);
+
+			const encryptedPassword = await AuthMicroServices.encryptPassword(user.password)
 
 			const newUser = {
 				...user,
-				password: hashedPassword,
-			};
+				password: encryptedPassword,
+			}
 
 			const createUserSucess = await this._userRepository.createUser(newUser);
 
@@ -67,8 +68,12 @@ export default class AuthMicroServices implements IAuthMicroServices {
 		const token = jwt.sign({ userId: user.id }, "my-secret-key", {
 		  expiresIn: "1h",
 		});
-	  
-		return { token };
+
+		return {token};
 	}
 	  
+	static async encryptPassword(password: string) {
+		return await bcrypt.hash(password, 10)
+	}
+
 }

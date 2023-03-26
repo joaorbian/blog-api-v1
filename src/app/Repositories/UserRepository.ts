@@ -1,8 +1,7 @@
+import AuthMicroServices from "../AWS/AuthMicroServices";
 import { UserInterface } from "../Interfaces/UserInterface";
 import { User } from "../Models/User";
-
 export default class UserRepository implements UserInterface {
-
   async createUser(userData: any): Promise<any> {
     const user = await User.create(userData);
     return user.toJSON();
@@ -40,9 +39,26 @@ export default class UserRepository implements UserInterface {
     if (!user) {
       return null;
     }
-    const updatedUser = await user.update(userData);
+		
+		const encryptedPassword = await AuthMicroServices.encryptPassword(userData.password)
+
+		const newUser = {
+			...userData,
+			password: encryptedPassword,
+		}
+
+    const updatedUser = await user.update(newUser);
     return updatedUser.toJSON();
   }
+
+	async recoveryPassword(userId: number, userData): Promise<any> {
+    const user = await User.findByPk(userId);
+		if (!user) {
+      return null;
+    }
+		const updatedUser = await user.update(userData, userData);
+    return updatedUser.toJSON();
+	}
 
   async deleteUserById(userId: string): Promise<any> {
     const user = await User.findByPk(userId);
