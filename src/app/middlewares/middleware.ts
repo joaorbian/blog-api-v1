@@ -1,20 +1,23 @@
-import * as jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
-import { getMessageStatusCode } from "../../services/helper.service";
+import * as jwt from "jsonwebtoken"
+import { Request, Response, NextFunction } from "express"
+import { getMessageStatusCode } from "../../services/helper.service"
 
-export default class Validate {
+class Validate {
 	validateToken(req: Request, res: Response, next: NextFunction) {
-		const authHeader = req.headers.authorization;
+		const authHeader = req.headers.authorization
 		if (!authHeader) {
-			res.status(404).json(getMessageStatusCode(404));
+			res.status(404).json({message: 'Não permitido'})
 		}
 
-		const token = authHeader.split(" ")[1];
+		const token = authHeader.split(" ")[1]
+		const tokenValid = jwt.verify(token, "my-secret-key")
 
-		if (jwt.verify(token, "my-secret-key")) {
-			next();
+		if(tokenValid) {
+			next()
 		} else {
-			res.status(401).json(getMessageStatusCode(401));
+			res.status(404).json({message: 'Não permitido'})
 		}
 	}
 }
+
+export default new Validate()

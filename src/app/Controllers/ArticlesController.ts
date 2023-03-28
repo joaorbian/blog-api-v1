@@ -1,87 +1,85 @@
-import { Request, Response } from "express";
-import { getMessageStatusCode } from "../../services/helper.service";
-import { ArticleService } from "../Services/ArticleService";
-import multer from "multer";
+import { Request, Response } from "express"
+import { getMessageStatusCode } from "../../services/helper.service"
+import ArticleService  from "../Services/ArticleService"
 
-export default class ArticlesController {
-	constructor(private readonly _articleService: ArticleService) {}
-
+class ArticlesController  {
 	async createArticle(request: Request, response: Response): Promise<void> {
 		try {
-			const articleData = {
+			const article = {
 				banner: request.body.banner,
 				title: request.body.title,
 				text: request.body.text,
 				user_id: request.body.user_id,
-			};
+			}
 
-			const createdArticle = await this._articleService.createArticle(
-				articleData
-			);
-
-			response.status(200).json(createdArticle);
-		} catch (err) {
-			console.error(err);
-			response.status(500).json({ message: "Internal server error" });
+			await ArticleService.createArticle(article)
+			response.status(201).json({message: 'Artigo criado com sucesso'})
+			
+		} catch(error) {
+			response.status(500).json({ message: error })
 		}
 	}
 
 	async findArticlesAll(request: Request, response: Response): Promise<void> {
 		try {
-			const users = await this._articleService.findArticlesAll(request.query);
-			response.status(200).json(users);
-		} catch (err) {
-			console.error(err);
-			response.status(500).json({ message: getMessageStatusCode(500) });
+			const articles = await ArticleService.findArticlesAll(request.query)
+
+			if(articles.length > 0) {
+				response.status(200).json(articles)
+			} else {
+				response.status(404).json({message: 'Não existe artigos'})
+			}
+
+		} catch(error) {
+			response.status(500).json({ message: error })
 		}
 	}
 
 	async findArticleById(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._articleService.findArticleById(
-				request.params.id
-			);
-			if (user) {
-				response.status(200).json(user);
+			const article = await ArticleService.findArticleById(request.params.id)
+
+			if(article) {
+				response.status(200).json(article)
 			} else {
-				response.status(404).json({ message: getMessageStatusCode(404) });
+				response.status(404).json({ message: 'Artigo não encontrado'})
 			}
-		} catch (err) {
-			console.error(err);
-			response.status(500).json({ message: getMessageStatusCode(500) });
+			
+		} catch(error) {
+			response.status(500).json({ message: error })
 		}
 	}
 
 	async updateArticleById(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._articleService.updateArticleById(
-				request.params.id,
-				request.body
-			);
-			if (user) {
-				response.status(200).json(user);
+
+			const id = Number(request.params.id)
+			const payload = request.body
+
+			const article = await ArticleService.updateArticleById(id, payload)
+
+			if(article) {
+				response.status(200).json({message: 'Informações atualizado com sucesso'})
 			} else {
-				response.status(404).json({ message: getMessageStatusCode(404) });
+				response.status(404).json({ message: getMessageStatusCode(404) })
 			}
-		} catch (err) {
-			console.error(err);
-			response.status(500).send("Error updating user");
+		} catch(error) {
+			response.status(500).json({ message: error })
 		}
 	}
 
 	async deleteArticleById(request: Request, response: Response): Promise<void> {
 		try {
-			const user = await this._articleService.deleteArticleById(
-				request.params.id
-			);
-			if (user) {
-				response.status(200).json({ message: "Article successfully deleted" });
-			} else {
-				response.status(404).json({ message: getMessageStatusCode(404) });
+			const article = await ArticleService.deleteArticleById(request.params.id)
+			
+			if(article) {
+				response.status(200).json({ message: 'Artigo deletado com sucesso' })
 			}
-		} catch (err) {
-			console.error(err);
-			response.status(500).json({ message: getMessageStatusCode(500) });
+
+		} catch(error) {
+			response.status(500).json({ message: error })
 		}
 	}
 }
+
+export default new ArticlesController()
