@@ -3,7 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import helmet from "helmet"
 import bodyParser from 'body-parser'
-import { UsersRouter } from '../routes/UsersRoutes'
+import { usersRouter } from '../routes/users.routes'
 import { articlesRouter } from '../routes/articles.routes'
 
 dotenv.config()
@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(cors())
 app.use(helmet())
 app.use(bodyParser())
-app.use(UsersRouter)
+app.use(usersRouter)
 app.use(articlesRouter)
 
 

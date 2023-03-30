@@ -1,34 +1,34 @@
 import UserRepository from "../Repositories/UserRepository";
 
-export default class UserService {
-	_userRepository: UserRepository;    
+class UserService {
 
-  constructor(userRepository: UserRepository) { 
-	this._userRepository = userRepository
-	} 
+	public async findUserById(userId) {
+		const user = await UserRepository.findUserById(userId);
+		return user;
+	}
 
-  async findUserById(userId) {
-    const user = await this._userRepository.findUserById(userId);
-    return user;
-  }
 
-  async findUsersAll(users) {
-    const allUser = await this._userRepository.findUsersAll(users);
-    return allUser;
-  }
+	public async findUsers(users) {
+		const allUser = await UserRepository.findUsers(users);
+		return allUser;
+	}
 
-  async updateUserById(userId, userData) {
-    const updatedUser = await this._userRepository.updateUserById(userId, userData);
-    return updatedUser;
-  }
 
-  async deleteUserById(userId) {
-    const deletedUser = await this._userRepository.deleteUserById(userId);
-    return deletedUser;
-  }
+	public async updateUser(id, name, username, email) {
+		const updatedUser = await UserRepository.updateUser(id, {
+			name: name,
+			username: username,
+			email: email,
+		});
+		return updatedUser;
+	}
 
-	async recoveryPassword(userId, userData) {
-		const recoveryPassword = await this._userRepository.recoveryPassword(userId, userData);
-    return recoveryPassword;
+
+	public async deleteUser(userId) {
+		const deletedUser = await UserRepository.deleteUserById(userId);
+		return deletedUser;
 	}
 }
+
+
+export default new UserService();

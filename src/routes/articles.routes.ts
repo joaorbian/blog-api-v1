@@ -1,7 +1,7 @@
 import { Router } from "express"
 
 import ArticlesController from "../app/Controllers/ArticlesController"
-import Validate from "../app/middlewares/middleware"
+import Validate from "../app/Middlewares/validateToken"
 import upload from "../app/middlewares/multer"
 
 const articlesRouter: Router = Router()
