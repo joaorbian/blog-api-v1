@@ -1,12 +1,14 @@
 import { Request, Response } from "express"
 import { getMessageStatusCode } from "../../services/helper.service"
 import ArticleService  from "../Services/ArticleService"
+import * as fs from 'fs';
+
 
 class ArticlesController  {
 	async createArticle(request: Request, response: Response): Promise<void> {
 		try {
 			const article = {
-				banner: request.body.banner,
+				banner: request.file.path,
 				title: request.body.title,
 				text: request.body.text,
 				user_id: request.body.user_id,
@@ -52,9 +54,21 @@ class ArticlesController  {
 
 	async updateArticleById(request: Request, response: Response): Promise<void> {
 		try {
-
 			const id = Number(request.params.id)
-			const payload = request.body
+			const payload = {
+				banner: request.file.path,
+				title: request.body.title,
+				text: request.body.text,
+			}
+			
+			const oldImage = request.body.oldImage
+			fs.unlink(oldImage, (error) => {
+				if(error) {
+					console.log(error);
+				} else {
+					console.log('imagem trocada')
+				}
+			});
 
 			const article = await ArticleService.updateArticleById(id, payload)
 

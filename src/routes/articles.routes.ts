@@ -9,7 +9,7 @@ const articlesRouter: Router = Router()
 articlesRouter.post('/create-article', Validate.validateToken, upload.single("file"), ArticlesController.createArticle)
 articlesRouter.get('/articles', Validate.validateToken, ArticlesController.findArticlesAll)
 articlesRouter.get('/article/:id', Validate.validateToken, ArticlesController.findArticleById)
-articlesRouter.put('/article/edit/:id', Validate.validateToken, ArticlesController.updateArticleById)
+articlesRouter.put('/article/edit/:id', Validate.validateToken, upload.single("file"), ArticlesController.updateArticleById)
 articlesRouter.delete('/article/delete/:id', Validate.validateToken, ArticlesController.deleteArticleById)
 
 export { articlesRouter }

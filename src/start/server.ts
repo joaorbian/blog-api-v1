@@ -17,7 +17,7 @@ app.use(helmet())
 app.use(bodyParser())
 app.use(usersRouter)
 app.use(articlesRouter)
-
+app.use('/articles/:id', express.static('tmp'))
 
 // DATABASE CONNECTION
 const sequelize = require('../config/database/database')
