@@ -16,7 +16,6 @@ class ArticlesController  {
 
 			await ArticleService.createArticle(article)
 			response.status(201).json({message: 'Artigo criado com sucesso'})
-			
 		} catch(error) {
 			response.status(500).json({ message: error })
 		}
@@ -68,7 +67,7 @@ class ArticlesController  {
 				} else {
 					console.log('imagem trocada')
 				}
-			});
+			})
 
 			const article = await ArticleService.updateArticleById(id, payload)
 

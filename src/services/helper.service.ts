@@ -30,7 +30,6 @@ function getMessageStatusCode(statusCode: number) {
       message = "Unknown Status Code";
       break;
   }
-
   return message;
 }
 
