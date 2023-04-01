@@ -34,7 +34,7 @@ export class Article extends Model<Article> {
 	title: string;
 
 	@Column({
-		type: DataType.STRING,
+		type: DataType.TEXT,
 		allowNull: false,
 		unique: true,
 		validate: {
