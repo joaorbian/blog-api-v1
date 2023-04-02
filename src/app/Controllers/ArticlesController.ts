@@ -26,8 +26,12 @@ class ArticlesController  {
 		try {
 			const articles = await ArticleService.findArticlesAll(request.query)
 
-			if(articles.length > 0) {
-				response.status(200).json(articles)
+			const articlesSorted = articles.sort(function(a, b) {
+				return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+			})
+			
+			if(articlesSorted.length > 0) {
+				response.status(200).json(articlesSorted)
 			} else {
 				response.status(404).json({message: 'Não existe artigos'})
 			}

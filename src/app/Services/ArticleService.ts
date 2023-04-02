@@ -3,11 +3,6 @@ import ArticleRepository from "../Repositories/ArticleRepository"
 class ArticleService {
 
 	async createArticle(articleData: any): Promise<any> {
-    // const userExists = await UserRepository.findUserById(articleData.user_id)
-    // if (!userExists) {
-    //   throw new Error("User not found")  
-    // }
-  
     return await ArticleRepository.createArticle(articleData)
   }
 
