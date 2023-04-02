@@ -13,4 +13,6 @@ usersRouter.put('/user/edit/:id',  Validate.validateToken, UsersController.updat
 usersRouter.put('/user/recovery-password/:id', Validate.validateToken, UsersController.recoveryPassword);
 usersRouter.delete('/user/delete/:id', Validate.validateToken, UsersController.deleteUser);
 
+usersRouter.get('/get-user/:id', UsersController.findUserById);
+
 export { usersRouter }
