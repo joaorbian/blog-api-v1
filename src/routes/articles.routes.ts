@@ -12,4 +12,8 @@ articlesRouter.get('/article/:id', Validate.validateToken, ArticlesController.fi
 articlesRouter.put('/article/edit/:id', Validate.validateToken, upload.single("file"), ArticlesController.updateArticleById)
 articlesRouter.delete('/article/delete/:id', Validate.validateToken, ArticlesController.deleteArticleById)
 
+articlesRouter.get('/all-articles', ArticlesController.findArticlesAll)
+articlesRouter.get('/get-article/:id', ArticlesController.findArticleById)
+
+
 export { articlesRouter }
