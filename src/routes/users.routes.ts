@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import UsersController from "../app/Controllers/UsersController";
-import Validate from "../app/Middlewares/validateToken"
+import Validate from "../app/middlewares/validateToken"
 
 const usersRouter: Router = Router()
 

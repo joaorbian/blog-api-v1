@@ -2,13 +2,18 @@ import { Article } from './../../app/Models/Article';
 import { Sequelize } from 'sequelize-typescript';
 import { User } from "../../app/Models/User";
 
+// DB_HOST="localhost"
+// DB_PORT="5432"
+// DB_NAME="dbblog"
+// DB_USER="progjoao"
+// DB_PASSWORD="picapau123"
 
 const sequelize = new Sequelize({
 	dialect: "postgres",
 	host: process.env.DB_HOST,
-	username: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_NAME,
+	username: "progjoao",
+	password: "picapau123",
+	database: "dbblog",
 	pool: {
         min: 0,
 		max: 10,
