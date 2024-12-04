@@ -14,6 +14,7 @@ class ArticlesController  {
 				text: request.body.text,
 				user_id: request.body.user_id,
 			}
+			console.log(article)
 
 			await ArticleService.createArticle(article)
 			response.status(201).json({message: 'Artigo criado com sucesso'})

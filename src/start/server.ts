@@ -7,7 +7,6 @@ import { articlesRouter } from '../routes/articles.routes'
 
 dotenv.config({ path: '../.env' });
 
-
 console.log('DB Configurations:', {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
